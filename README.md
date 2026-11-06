@@ -104,6 +104,11 @@ Click **Start Receiver**, then on the iPhone open Control Center → Screen Mirr
 select the configured receiver name. Both devices must be on the same Wi-Fi/LAN and
 client isolation must be disabled on the access point.
 
+During mirroring, press **F11** (or double-click the video) for the distraction-free
+fullscreen view, **Esc** to leave fullscreen, and **R** to rotate the preview by 90°.
+The stage automatically changes between portrait and landscape when the incoming
+frame dimensions change.
+
 If Windows prompts for network access, allow the executable only on **Private**
 networks. Do not disable Windows Firewall globally.
 
@@ -128,14 +133,17 @@ recordings default to sibling folders there. Useful advanced keys include
 ## Features and honest limitations
 
 - Real UxPlay receiver process; no mock receiver in production.
-- Live QML preview via RTP/PyAV with measured render FPS and actual resolution.
-- Responsive glass dashboard, fullscreen, always-on-top compact view, animations.
+- Low-latency QML preview via RTP/PyAV with measured FPS, latest-frame delivery, and
+  no queued-frame buildup when the UI is briefly busy.
+- Responsive glass dashboard, distraction-free fullscreen, automatic portrait/
+  landscape sizing, manual 90° rotation, and keyboard shortcuts.
 - PNG/JPEG screenshots and local H.264 MP4 recording with pause/stop.
 - Audio is rendered by UxPlay/GStreamer through WASAPI. Mute/volume changes restart the
   receiver. Dynamic output-device selection and audio capture into the Python MP4 are
   not yet supported.
-- Rotation is intentionally not advertised until rotation metadata has been verified
-  against physical iPhones. Aspect ratio is always preserved.
+- Native portrait/landscape frame dimensions and manual rotation are supported while
+  preserving aspect ratio. Automatic handling of every iOS rotation-metadata variant
+  still requires verification against physical iPhone models.
 - The NVIDIA option requests `d3d11h264dec`; availability depends on installed
   GStreamer plugins/driver. Software decoding remains the compatibility fallback, but
   if that element is absent, disable `hardware_acceleration` in config and restart.

@@ -9,7 +9,7 @@ GlassPanel {
     implicitWidth: 150
     implicitHeight: 82
     panelRadius: 17
-    panelColor: "#70171D30"
+    panelColor: "#8A121827"
     Rectangle { width: 3; height: 28; radius: 2; color: root.accent; anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter }
     Text { text: root.label.toUpperCase(); color: "#748198"; font.pixelSize: 9; font.letterSpacing: 1.2; anchors.left: parent.left; anchors.leftMargin: 26; anchors.top: parent.top; anchors.topMargin: 15 }
     Text { text: root.value; color: "#F4F7FF"; font.pixelSize: 18; font.weight: Font.DemiBold; anchors.left: parent.left; anchors.leftMargin: 26; anchors.top: parent.top; anchors.topMargin: 35 }

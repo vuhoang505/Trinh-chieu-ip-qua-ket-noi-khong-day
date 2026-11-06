@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import threading
 import time
 from pathlib import Path
 
@@ -25,8 +26,9 @@ class AppController(QObject):
     frameChanged = Signal()
     recordingChanged = Signal()
     settingsChanged = Signal()
+    displayChanged = Signal()
     toast = Signal(str, str)
-    _frameArrived = Signal(object, float, int, int)
+    _frameReady = Signal()
 
     def __init__(
         self,
@@ -55,10 +57,14 @@ class AppController(QObject):
         self._height = 0
         self._has_frame = False
         self._frame_serial = 0
+        self._rotation = 0
+        self._pending_frame: tuple[QImage, float, int, int] | None = None
+        self._frame_delivery_scheduled = False
+        self._frame_lock = threading.Lock()
         self._record_started = 0.0
         self._record_seconds = 0
         self._muted = config.mute
-        self._frameArrived.connect(self._accept_frame)
+        self._frameReady.connect(self._accept_latest_frame)
         events.receiver_status.connect(self._on_receiver_status)
         events.notification.connect(self.toast)
         self._record_timer = QTimer(self)
@@ -84,6 +90,26 @@ class AppController(QObject):
     @Property(int, notify=frameChanged)
     def frameSerial(self) -> int:  # noqa: N802
         return self._frame_serial
+
+    @Property(int, notify=metricsChanged)
+    def videoWidth(self) -> int:  # noqa: N802
+        return self._width
+
+    @Property(int, notify=metricsChanged)
+    def videoHeight(self) -> int:  # noqa: N802
+        return self._height
+
+    @Property(float, notify=displayChanged)
+    def displayAspectRatio(self) -> float:  # noqa: N802
+        if not self._width or not self._height:
+            return 9.0 / 16.0
+        if self._rotation % 180:
+            return self._height / self._width
+        return self._width / self._height
+
+    @Property(int, notify=displayChanged)
+    def rotation(self) -> int:
+        return self._rotation
 
     @Property(float, notify=metricsChanged)
     def fps(self) -> float:
@@ -182,6 +208,17 @@ class AppController(QObject):
             self.toast.emit("Âm thanh", "Đang khởi động lại receiver để áp dụng")
             self.receiver.restart()
 
+    @Slot()
+    def rotateClockwise(self) -> None:  # noqa: N802
+        self._rotation = (self._rotation + 90) % 360
+        self.displayChanged.emit()
+
+    @Slot()
+    def resetRotation(self) -> None:  # noqa: N802
+        if self._rotation:
+            self._rotation = 0
+            self.displayChanged.emit()
+
     @Slot(str, str, str, bool)
     def saveSettings(
         self, receiver_name: str, screenshots_path: str, recordings_path: str, animations: bool
@@ -218,14 +255,30 @@ class AppController(QObject):
             self.pipeline.stop()
 
     def _publish_frame(self, image: QImage, fps: float, width: int, height: int) -> None:
-        self._frameArrived.emit(image, fps, width, height)
+        # Decode can be faster than QML rendering. Keep only the newest frame
+        # instead of building an ever-growing queued-signal backlog.
+        should_schedule = False
+        with self._frame_lock:
+            self._pending_frame = (image, fps, width, height)
+            if not self._frame_delivery_scheduled:
+                self._frame_delivery_scheduled = True
+                should_schedule = True
+        if should_schedule:
+            self._frameReady.emit()
 
     def _publish_video_error(self, message: str) -> None:
         LOGGER.error("Video pipeline: %s", message)
         self.toast.emit("Video", message)
 
-    @Slot(object, float, int, int)
-    def _accept_frame(self, image: QImage, fps: float, width: int, height: int) -> None:
+    @Slot()
+    def _accept_latest_frame(self) -> None:
+        with self._frame_lock:
+            pending = self._pending_frame
+            self._pending_frame = None
+            self._frame_delivery_scheduled = False
+        if pending is None:
+            return
+        image, fps, width, height = pending
         self.provider.update(image)
         if self.recorder.active:
             self.recorder.add_frame(image)
@@ -239,6 +292,7 @@ class AppController(QObject):
             self._status_detail = "Đang nhận màn hình iPhone"
             self.statusChanged.emit()
         self.metricsChanged.emit()
+        self.displayChanged.emit()
         self.frameChanged.emit()
 
     @Slot(str, str)
@@ -250,6 +304,8 @@ class AppController(QObject):
         self.statusChanged.emit()
 
     def _reset_stream(self) -> None:
+        with self._frame_lock:
+            self._pending_frame = None
         self._fps = 0.0
         self._width = 0
         self._height = 0

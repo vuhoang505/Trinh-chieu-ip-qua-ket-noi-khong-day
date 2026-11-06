@@ -15,7 +15,10 @@ class FrameImageProvider(QQuickImageProvider):
 
     def update(self, image: QImage) -> None:
         with self._lock:
-            self._image = image.copy()
+            # QImage is implicitly shared. Keeping the reference avoids a full
+            # pixel-buffer copy on every frame while still being safe here:
+            # decoded frames are never mutated after publication.
+            self._image = image
 
     def current(self) -> QImage:
         with self._lock:
@@ -27,7 +30,7 @@ class FrameImageProvider(QQuickImageProvider):
         if image.isNull():
             image = QImage(2, 2, QImage.Format_RGB32)
             image.fill(0x10131F)
-        if requested_size.isValid():
+        if requested_size.isValid() and requested_size != image.size():
             image = image.scaled(
                 requested_size,
                 aspectMode=Qt.KeepAspectRatio,

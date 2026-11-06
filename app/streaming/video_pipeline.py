@@ -68,13 +68,17 @@ class VideoPipeline:
                     "protocol_whitelist": "file,udp,rtp,crypto,data",
                     "fflags": "nobuffer",
                     "flags": "low_delay",
-                    "analyzeduration": "1000000",
-                    "probesize": "1000000",
+                    "analyzeduration": "250000",
+                    "probesize": "262144",
+                    "max_delay": "0",
+                    "reorder_queue_size": "0",
                     "rw_timeout": "1000000",
                 },
             )
             stream = self._container.streams.video[0]
-            stream.thread_type = "AUTO"
+            # Slice threading does not hold complete frames waiting for other
+            # frames, which keeps interactive mirroring latency predictable.
+            stream.thread_type = "SLICE"
             for frame in self._container.decode(stream):
                 if self._stop.is_set():
                     break
