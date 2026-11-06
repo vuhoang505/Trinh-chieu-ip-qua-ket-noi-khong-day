@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication, QTimer, QUrl, Qt
-from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtGui import QFont, QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
 from app.core.config import ConfigStore, project_root
@@ -19,6 +19,7 @@ def run() -> int:
     os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Basic")
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QGuiApplication(sys.argv)
+    app.setFont(QFont("Segoe UI", 10))
     app.setApplicationName("iPhone Wireless Mirror")
     app.setOrganizationName("Local Mirror")
     app.setWindowIcon(QIcon(str(project_root() / "assets" / "icons" / "app.svg")))

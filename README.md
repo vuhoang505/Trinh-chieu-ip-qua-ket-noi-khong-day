@@ -135,8 +135,9 @@ recordings default to sibling folders there. Useful advanced keys include
 - Real UxPlay receiver process; no mock receiver in production.
 - Low-latency QML preview via RTP/PyAV with measured FPS, latest-frame delivery, and
   no queued-frame buildup when the UI is briefly busy.
-- Responsive glass dashboard, distraction-free fullscreen, automatic portrait/
-  landscape sizing, manual 90° rotation, and keyboard shortcuts.
+- Responsive light 3D dashboard with polished hover/press/focus effects,
+  distraction-free fullscreen, automatic portrait/landscape sizing, manual 90°
+  rotation, and keyboard shortcuts.
 - PNG/JPEG screenshots and local H.264 MP4 recording with pause/stop.
 - Audio is rendered by UxPlay/GStreamer through WASAPI. Mute/volume changes restart the
   receiver. Dynamic output-device selection and audio capture into the Python MP4 are

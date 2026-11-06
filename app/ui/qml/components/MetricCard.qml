@@ -5,14 +5,56 @@ GlassPanel {
     property string label: ""
     property string value: "—"
     property string detail: ""
-    property color accent: "#73A5FF"
-    implicitWidth: 150
-    implicitHeight: 82
-    panelRadius: 17
-    panelColor: "#8A121827"
-    Rectangle { width: 3; height: 28; radius: 2; color: root.accent; anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter }
-    Text { text: root.label.toUpperCase(); color: "#748198"; font.pixelSize: 9; font.letterSpacing: 1.2; anchors.left: parent.left; anchors.leftMargin: 26; anchors.top: parent.top; anchors.topMargin: 15 }
-    Text { text: root.value; color: "#F4F7FF"; font.pixelSize: 18; font.weight: Font.DemiBold; anchors.left: parent.left; anchors.leftMargin: 26; anchors.top: parent.top; anchors.topMargin: 35 }
-    Text { text: root.detail; color: "#75839B"; font.pixelSize: 10; anchors.right: parent.right; anchors.rightMargin: 12; anchors.bottom: parent.bottom; anchors.bottomMargin: 10 }
-}
+    property color accent: "#4F7CFF"
 
+    implicitWidth: 170
+    implicitHeight: 82
+    panelRadius: 19
+    panelColor: "#F5FFFFFF"
+    strokeColor: "#DCE7F4"
+
+    Rectangle {
+        width: 5; height: 38; radius: 3
+        color: root.accent
+        anchors.left: parent.left; anchors.leftMargin: 14
+        anchors.verticalCenter: parent.verticalCenter
+    }
+    Rectangle {
+        width: 14; height: 38; radius: 7
+        color: root.accent; opacity: 0.12
+        anchors.left: parent.left; anchors.leftMargin: 9
+        anchors.verticalCenter: parent.verticalCenter
+    }
+    Text {
+        anchors.left: parent.left; anchors.leftMargin: 31
+        anchors.right: parent.right; anchors.rightMargin: 12
+        anchors.top: parent.top; anchors.topMargin: 14
+        text: root.label.toUpperCase()
+        color: "#78869B"
+        font.family: "Segoe UI"
+        font.pixelSize: 9
+        font.weight: Font.DemiBold
+        font.letterSpacing: 1.1
+        elide: Text.ElideRight
+    }
+    Text {
+        anchors.left: parent.left; anchors.leftMargin: 31
+        anchors.right: parent.right; anchors.rightMargin: 54
+        anchors.bottom: parent.bottom; anchors.bottomMargin: 14
+        text: root.value
+        color: "#23324A"
+        font.family: "Segoe UI"
+        font.pixelSize: 17
+        font.weight: Font.DemiBold
+        elide: Text.ElideRight
+    }
+    Text {
+        anchors.right: parent.right; anchors.rightMargin: 12
+        anchors.bottom: parent.bottom; anchors.bottomMargin: 13
+        text: root.detail
+        color: root.accent
+        font.family: "Segoe UI"
+        font.pixelSize: 9
+        font.weight: Font.DemiBold
+    }
+}

@@ -1,22 +1,44 @@
 import QtQuick
+import QtQuick.Effects
 
-Rectangle {
+Item {
     id: root
-    property color panelColor: "#99151A2B"
-    property color strokeColor: "#24FFFFFF"
+    property color panelColor: "#F4FFFFFF"
+    property color strokeColor: "#D8E5F5"
     property real panelRadius: 22
-    color: panelColor
-    radius: panelRadius
-    border.width: 1
-    border.color: strokeColor
+    property bool elevated: true
+
+    MultiEffect {
+        anchors.fill: panel
+        source: panel
+        visible: root.elevated
+        shadowEnabled: true
+        shadowColor: "#42638C"
+        shadowOpacity: 0.22
+        shadowBlur: 0.75
+        shadowVerticalOffset: 8
+        shadowHorizontalOffset: 0
+    }
 
     Rectangle {
+        id: panel
         anchors.fill: parent
-        anchors.margins: 1
-        radius: Math.max(0, parent.radius - 1)
-        color: "transparent"
+        color: root.panelColor
+        radius: root.panelRadius
         border.width: 1
-        border.color: "#0BFFFFFF"
+        border.color: root.strokeColor
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 2
+            height: Math.min(40, parent.height * 0.32)
+            radius: Math.max(0, parent.radius - 2)
+            color: "transparent"
+            border.width: 1
+            border.color: "#BFFFFFFF"
+            opacity: 0.8
+        }
     }
 }
-

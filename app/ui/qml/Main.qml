@@ -13,7 +13,8 @@ ApplicationWindow {
     minimumHeight: 660
     visible: true
     title: "iPhone Wireless Mirror"
-    color: "#070A12"
+    color: "#EDF4FF"
+    font.family: "Segoe UI"
 
     property int currentPage: 0
     property bool immersive: false
@@ -41,26 +42,27 @@ ApplicationWindow {
     Rectangle {
         anchors.fill: parent
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#10182A" }
-            GradientStop { position: 0.42; color: "#090D18" }
-            GradientStop { position: 1.0; color: "#060810" }
+            GradientStop { position: 0.0; color: "#E9F5FF" }
+            GradientStop { position: 0.46; color: "#F5F2FF" }
+            GradientStop { position: 1.0; color: "#EAF9F7" }
         }
     }
     Rectangle {
         width: 620; height: 620; radius: 310
-        x: -280; y: -360; color: "#1A3478FF"
+        x: -280; y: -360; color: "#5B8CFF"
+        opacity: 0.13
         SequentialAnimation on opacity {
             running: App.animationsEnabled && !window.immersive
             loops: Animation.Infinite
-            NumberAnimation { from: 0.35; to: 0.75; duration: 4200; easing.type: Easing.InOutSine }
-            NumberAnimation { to: 0.35; duration: 4200; easing.type: Easing.InOutSine }
+            NumberAnimation { from: 0.08; to: 0.18; duration: 4200; easing.type: Easing.InOutSine }
+            NumberAnimation { to: 0.08; duration: 4200; easing.type: Easing.InOutSine }
         }
     }
     Rectangle {
         width: 520; height: 520; radius: 260
         anchors.right: parent.right; anchors.bottom: parent.bottom
         anchors.rightMargin: -260; anchors.bottomMargin: -300
-        color: "#123CD9B2"
+        color: "#6546D6B7"
     }
 
     RowLayout {
@@ -75,8 +77,8 @@ ApplicationWindow {
             Layout.preferredWidth: 232
             Layout.fillHeight: true
             panelRadius: 26
-            panelColor: "#D00D1321"
-            strokeColor: "#2DFFFFFF"
+            panelColor: "#EFFFFFFF"
+            strokeColor: "#D8E5F4"
 
             ColumnLayout {
                 anchors.fill: parent
@@ -90,22 +92,24 @@ ApplicationWindow {
                     Rectangle {
                         width: 44; height: 44; radius: 14
                         gradient: Gradient {
-                            GradientStop { position: 0; color: "#5D91FF" }
-                            GradientStop { position: 1; color: "#8B5CF6" }
+                            GradientStop { position: 0; color: "#79A6FF" }
+                            GradientStop { position: 1; color: "#8768ED" }
                         }
-                        Text { anchors.centerIn: parent; text: "M"; color: "white"; font.pixelSize: 20; font.weight: Font.Bold }
+                        border.width: 1; border.color: "#A6BFFF"
+                        Rectangle { anchors.fill: parent; anchors.margins: 2; radius: 12; color: "transparent"; border.width: 1; border.color: "#70FFFFFF" }
+                        Text { anchors.centerIn: parent; text: "M"; color: "white"; font.family: "Segoe UI"; font.pixelSize: 20; font.weight: Font.Bold }
                     }
                     Column {
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 3
-                        Text { text: "Mirror Studio"; color: "#F8FAFF"; font.pixelSize: 16; font.weight: Font.DemiBold }
-                        Text { text: "AIRPLAY • LOCAL"; color: "#71809C"; font.pixelSize: 9; font.letterSpacing: 1.3 }
+                        Text { text: "Mirror Studio"; color: "#24324A"; font.pixelSize: 16; font.weight: Font.DemiBold }
+                        Text { text: "AIRPLAY • LOCAL"; color: "#7B89A0"; font.pixelSize: 9; font.letterSpacing: 1.3 }
                     }
                 }
 
                 Text {
                     text: "KHÔNG GIAN"
-                    color: "#586781"
+                    color: "#8492A8"
                     font.pixelSize: 9
                     font.letterSpacing: 1.6
                     leftPadding: 12
@@ -121,9 +125,12 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 112
                     radius: 18
-                    color: "#66192334"
+                    gradient: Gradient {
+                        GradientStop { position: 0; color: "#FFFFFFFF" }
+                        GradientStop { position: 1; color: "#E8F0FF" }
+                    }
                     border.width: 1
-                    border.color: App.receiverRunning ? "#305CE5AA" : "#20FFFFFF"
+                    border.color: App.receiverRunning ? "#8ADAB9" : "#D6E2F1"
                     Column {
                         anchors.fill: parent; anchors.margins: 15; spacing: 8
                         Row {
@@ -131,15 +138,15 @@ ApplicationWindow {
                             Rectangle {
                                 width: 8; height: 8; radius: 4
                                 anchors.verticalCenter: parent.verticalCenter
-                                color: App.hasFrame ? "#55E6A5" : (App.receiverRunning ? "#F4BD62" : "#647086")
+                                color: App.hasFrame ? "#24C889" : (App.receiverRunning ? "#F0A43A" : "#91A0B4")
                             }
                             Text {
                                 text: App.hasFrame ? "Đang trình chiếu" : (App.receiverRunning ? "Đang chờ iPhone" : "Receiver đang tắt")
-                                color: "#EDF2FB"; font.pixelSize: 12; font.weight: Font.DemiBold
+                                color: "#2C3A51"; font.pixelSize: 12; font.weight: Font.DemiBold
                             }
                         }
-                        Text { width: parent.width; text: App.statusDetail; color: "#8290A8"; font.pixelSize: 10; elide: Text.ElideRight }
-                        Text { text: "Kết nối riêng tư trong mạng LAN"; color: "#637797"; font.pixelSize: 9 }
+                        Text { width: parent.width; text: App.statusDetail; color: "#78869C"; font.pixelSize: 10; elide: Text.ElideRight }
+                        Text { text: "Kết nối riêng tư trong mạng LAN"; color: "#6685B7"; font.pixelSize: 9 }
                     }
                 }
             }
@@ -161,11 +168,11 @@ ApplicationWindow {
                     spacing: 4
                     Text {
                         text: ["Trình chiếu trực tiếp", "Thư viện nội dung", "Cài đặt ứng dụng"][window.currentPage]
-                        color: "#F7F9FF"; font.pixelSize: 25; font.weight: Font.DemiBold
+                        color: "#1E2D45"; font.pixelSize: 25; font.weight: Font.DemiBold
                     }
                     Text {
                         text: window.currentPage === 0 ? "Độ trễ thấp • Tự thích ứng màn hình dọc và ngang" : "Dữ liệu được lưu cục bộ trên máy tính"
-                        color: "#7B89A1"; font.pixelSize: 11
+                        color: "#718096"; font.pixelSize: 11
                     }
                 }
 
@@ -175,13 +182,16 @@ ApplicationWindow {
                     spacing: 10
                     Rectangle {
                         width: 124; height: 36; radius: 18
-                        color: App.hasFrame ? "#1855E6A5" : "#12FFFFFF"
+                        gradient: Gradient {
+                            GradientStop { position: 0; color: App.hasFrame ? "#E5FFF5" : "#FFFFFF" }
+                            GradientStop { position: 1; color: App.hasFrame ? "#D1F7E8" : "#E7EEF8" }
+                        }
                         border.width: 1
-                        border.color: App.hasFrame ? "#4055E6A5" : "#20FFFFFF"
+                        border.color: App.hasFrame ? "#8FE0BF" : "#D2DFEF"
                         Row {
                             anchors.centerIn: parent; spacing: 7
-                            Rectangle { width: 7; height: 7; radius: 4; color: App.hasFrame ? "#55E6A5" : "#6F7A8E" }
-                            Text { text: App.hasFrame ? "LIVE  " + App.fps.toFixed(0) + " FPS" : "CHƯA KẾT NỐI"; color: "#DCE5F5"; font.pixelSize: 9; font.weight: Font.DemiBold }
+                            Rectangle { width: 7; height: 7; radius: 4; color: App.hasFrame ? "#22C584" : "#8A98AC" }
+                            Text { text: App.hasFrame ? "LIVE  " + App.fps.toFixed(0) + " FPS" : "CHƯA KẾT NỐI"; color: "#42516A"; font.pixelSize: 9; font.weight: Font.DemiBold }
                         }
                     }
                     ToolButton { glyph: "⛶"; text: "Toàn màn hình"; onClicked: window.toggleFullscreen() }
@@ -210,9 +220,9 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 76
                 spacing: 10
-                MetricCard { Layout.fillWidth: true; label: "KẾT NỐI"; value: App.hasFrame ? "LIVE" : (App.receiverRunning ? "READY" : "OFFLINE"); detail: "AIRPLAY"; accent: App.hasFrame ? "#55E6A5" : "#72819A" }
-                MetricCard { Layout.fillWidth: true; label: "ĐỘ PHÂN GIẢI"; value: App.resolution; detail: App.videoWidth > App.videoHeight ? "NGANG" : "DỌC"; accent: "#6A9CFF" }
-                MetricCard { Layout.fillWidth: true; label: "TỐC ĐỘ KHUNG"; value: App.hasFrame ? App.fps.toFixed(1) + " FPS" : "—"; detail: "REAL TIME"; accent: "#A879FF" }
+                MetricCard { Layout.fillWidth: true; label: "KẾT NỐI"; value: App.hasFrame ? "LIVE" : (App.receiverRunning ? "READY" : "OFFLINE"); detail: "AIRPLAY"; accent: App.hasFrame ? "#22C98A" : "#8290A5" }
+                MetricCard { Layout.fillWidth: true; label: "ĐỘ PHÂN GIẢI"; value: App.resolution; detail: App.videoWidth > App.videoHeight ? "NGANG" : "DỌC"; accent: "#4F82FF" }
+                MetricCard { Layout.fillWidth: true; label: "TỐC ĐỘ KHUNG"; value: App.hasFrame ? App.fps.toFixed(1) + " FPS" : "—"; detail: "REAL TIME"; accent: "#8B61E9" }
                 MetricCard { Layout.fillWidth: true; label: "GHI HÌNH"; value: App.recording ? App.recordingTime : "SẴN SÀNG"; detail: App.recordingPaused ? "TẠM DỪNG" : "LOCAL"; accent: App.recording ? "#FF6F91" : "#77859C" }
             }
 
@@ -220,8 +230,9 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 panelRadius: window.immersive ? 0 : 26
-                panelColor: window.immersive ? "#FF000000" : "#C0090D16"
-                strokeColor: window.immersive ? "transparent" : "#26FFFFFF"
+                panelColor: window.immersive ? "#FF000000" : "#F7FFFFFF"
+                strokeColor: window.immersive ? "transparent" : "#D8E5F4"
+                elevated: !window.immersive
 
                 Item {
                     id: stage
@@ -235,9 +246,9 @@ ApplicationWindow {
                         width: Math.min(stage.width, stage.height * ratio)
                         height: width / ratio
                         radius: window.immersive ? 0 : (App.videoWidth > App.videoHeight ? 18 : 30)
-                        color: "#020308"
+                        color: App.hasFrame ? "#020308" : "#EDF4FF"
                         border.width: window.immersive ? 0 : 1
-                        border.color: "#405B79A8"
+                        border.color: "#C5D7EC"
                         clip: true
 
                         Image {
@@ -259,9 +270,9 @@ ApplicationWindow {
                             anchors.fill: parent
                             visible: !App.hasFrame
                             gradient: Gradient {
-                                GradientStop { position: 0; color: "#121D34" }
-                                GradientStop { position: 0.55; color: "#0B1020" }
-                                GradientStop { position: 1; color: "#18102C" }
+                                GradientStop { position: 0; color: "#F7FBFF" }
+                                GradientStop { position: 0.55; color: "#E7F0FF" }
+                                GradientStop { position: 1; color: "#EFE9FF" }
                             }
                             Column {
                                 anchors.centerIn: parent
@@ -270,8 +281,12 @@ ApplicationWindow {
                                 Rectangle {
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     width: 72; height: 72; radius: 24
-                                    color: "#225D8FFF"; border.width: 1; border.color: "#4E83AAFF"
-                                    Text { anchors.centerIn: parent; text: "⌁"; color: "#C8D9FF"; font.pixelSize: 38 }
+                                    gradient: Gradient {
+                                        GradientStop { position: 0; color: "#FFFFFF" }
+                                        GradientStop { position: 1; color: "#D8E6FF" }
+                                    }
+                                    border.width: 1; border.color: "#B9CBEE"
+                                    Text { anchors.centerIn: parent; text: "⌁"; color: "#557BE0"; font.family: "Segoe UI Symbol"; font.pixelSize: 38 }
                                     SequentialAnimation on scale {
                                         running: App.animationsEnabled && App.receiverRunning
                                         loops: Animation.Infinite
@@ -279,8 +294,8 @@ ApplicationWindow {
                                         NumberAnimation { to: 0.94; duration: 1100; easing.type: Easing.InOutSine }
                                     }
                                 }
-                                Text { anchors.horizontalCenter: parent.horizontalCenter; text: App.receiverRunning ? "Sẵn sàng nhận màn hình" : "Bắt đầu trình chiếu"; color: "#F3F6FD"; font.pixelSize: 19; font.weight: Font.DemiBold }
-                                Text { anchors.horizontalCenter: parent.horizontalCenter; text: App.receiverRunning ? "Mở Trung tâm điều khiển → Phản chiếu màn hình" : "Khởi động receiver để iPhone tìm thấy máy tính"; color: "#8997AD"; font.pixelSize: 11 }
+                                Text { anchors.horizontalCenter: parent.horizontalCenter; text: App.receiverRunning ? "Sẵn sàng nhận màn hình" : "Bắt đầu trình chiếu"; color: "#24334B"; font.pixelSize: 19; font.weight: Font.DemiBold }
+                                Text { width: parent.width; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideRight; text: App.receiverRunning ? "Mở Trung tâm điều khiển → Phản chiếu màn hình" : "Khởi động receiver để iPhone tìm thấy máy tính"; color: "#718098"; font.pixelSize: 11 }
                                 ToolButton { anchors.horizontalCenter: parent.horizontalCenter; visible: !App.receiverRunning; primary: true; glyph: "▶"; text: "Khởi động receiver"; onClicked: App.startReceiver() }
                             }
                         }
@@ -295,9 +310,17 @@ ApplicationWindow {
                         width: dockRow.width + 24
                         height: 58
                         radius: 20
-                        color: "#E3121826"
+                        gradient: Gradient {
+                            GradientStop { position: 0; color: "#F8FFFFFF" }
+                            GradientStop { position: 1; color: "#F2E5EDF8" }
+                        }
                         border.width: 1
-                        border.color: "#35FFFFFF"
+                        border.color: "#C5D4E7"
+
+                        Rectangle {
+                            x: 12; y: parent.height - 1; width: parent.width - 24; height: 7; radius: 4
+                            color: "#315D7EA6"; z: -1
+                        }
 
                         Row {
                             id: dockRow
@@ -332,18 +355,18 @@ ApplicationWindow {
             GlassPanel {
                 Layout.fillWidth: true; Layout.fillHeight: true
                 Column { anchors.centerIn: parent; spacing: 15
-                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "●"; color: "#FF7194"; font.pixelSize: 38 }
-                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "Bản ghi màn hình"; color: "#F3F6FC"; font.pixelSize: 20; font.weight: Font.DemiBold }
-                    Text { anchors.horizontalCenter: parent.horizontalCenter; width: 360; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideMiddle; text: App.recordingsPath; color: "#7F8CA2"; font.pixelSize: 10 }
+                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "●"; color: "#F05283"; font.family: "Segoe UI Symbol"; font.pixelSize: 38 }
+                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "Bản ghi màn hình"; color: "#26354D"; font.pixelSize: 20; font.weight: Font.DemiBold }
+                    Text { anchors.horizontalCenter: parent.horizontalCenter; width: Math.min(360, parent.parent.width - 48); horizontalAlignment: Text.AlignHCenter; elide: Text.ElideMiddle; text: App.recordingsPath; color: "#75839A"; font.pixelSize: 10 }
                     ToolButton { anchors.horizontalCenter: parent.horizontalCenter; glyph: "↗"; text: "Mở thư mục"; onClicked: App.openPath(App.recordingsPath) }
                 }
             }
             GlassPanel {
                 Layout.fillWidth: true; Layout.fillHeight: true
                 Column { anchors.centerIn: parent; spacing: 15
-                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "▣"; color: "#6A9CFF"; font.pixelSize: 42 }
-                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "Ảnh chụp màn hình"; color: "#F3F6FC"; font.pixelSize: 20; font.weight: Font.DemiBold }
-                    Text { anchors.horizontalCenter: parent.horizontalCenter; width: 360; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideMiddle; text: App.screenshotsPath; color: "#7F8CA2"; font.pixelSize: 10 }
+                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "▣"; color: "#4F82F3"; font.family: "Segoe UI Symbol"; font.pixelSize: 42 }
+                    Text { anchors.horizontalCenter: parent.horizontalCenter; text: "Ảnh chụp màn hình"; color: "#26354D"; font.pixelSize: 20; font.weight: Font.DemiBold }
+                    Text { anchors.horizontalCenter: parent.horizontalCenter; width: Math.min(360, parent.parent.width - 48); horizontalAlignment: Text.AlignHCenter; elide: Text.ElideMiddle; text: App.screenshotsPath; color: "#75839A"; font.pixelSize: 10 }
                     ToolButton { anchors.horizontalCenter: parent.horizontalCenter; glyph: "↗"; text: "Mở thư mục"; onClicked: App.openPath(App.screenshotsPath) }
                 }
             }
@@ -357,18 +380,35 @@ ApplicationWindow {
             Layout.preferredHeight: 460
             ColumnLayout {
                 anchors.fill: parent; anchors.margins: 28; spacing: 14
-                Text { text: "Receiver & lưu trữ"; color: "#F5F7FC"; font.pixelSize: 20; font.weight: Font.DemiBold }
-                Text { text: "Tên hiển thị trên iPhone"; color: "#8996AA"; font.pixelSize: 11 }
-                TextField { id: receiverName; Layout.fillWidth: true; text: App.receiverName; color: "#F0F4FC"; background: Rectangle { radius: 13; color: "#8A101725"; border.color: parent.activeFocus ? "#6C8FFF" : "#25FFFFFF" } }
-                Text { text: "Thư mục ảnh chụp"; color: "#8996AA"; font.pixelSize: 11 }
-                TextField { id: screenshotsPath; Layout.fillWidth: true; text: App.screenshotsPath; color: "#F0F4FC"; background: Rectangle { radius: 13; color: "#8A101725"; border.color: parent.activeFocus ? "#6C8FFF" : "#25FFFFFF" } }
-                Text { text: "Thư mục bản ghi"; color: "#8996AA"; font.pixelSize: 11 }
-                TextField { id: recordingsPath; Layout.fillWidth: true; text: App.recordingsPath; color: "#F0F4FC"; background: Rectangle { radius: 13; color: "#8A101725"; border.color: parent.activeFocus ? "#6C8FFF" : "#25FFFFFF" } }
+                Text { text: "Receiver & lưu trữ"; color: "#24334A"; font.pixelSize: 20; font.weight: Font.DemiBold }
+                Text { text: "Tên hiển thị trên iPhone"; color: "#718097"; font.pixelSize: 11 }
+                TextField { id: receiverName; Layout.fillWidth: true; Layout.preferredHeight: 48; text: App.receiverName; color: "#27364E"; selectByMouse: true; leftPadding: 16; rightPadding: 16; font.family: "Segoe UI"; font.pixelSize: 12; background: Rectangle { radius: 14; gradient: Gradient { GradientStop { position: 0; color: "#FFFFFF" } GradientStop { position: 1; color: "#E8EFF8" } } border.width: parent.activeFocus ? 2 : 1; border.color: parent.activeFocus ? "#6C8FFF" : "#D0DCEC" } }
+                Text { text: "Thư mục ảnh chụp"; color: "#718097"; font.pixelSize: 11 }
+                TextField { id: screenshotsPath; Layout.fillWidth: true; Layout.preferredHeight: 48; text: App.screenshotsPath; color: "#27364E"; selectByMouse: true; leftPadding: 16; rightPadding: 16; font.family: "Segoe UI"; font.pixelSize: 12; background: Rectangle { radius: 14; gradient: Gradient { GradientStop { position: 0; color: "#FFFFFF" } GradientStop { position: 1; color: "#E8EFF8" } } border.width: parent.activeFocus ? 2 : 1; border.color: parent.activeFocus ? "#6C8FFF" : "#D0DCEC" } }
+                Text { text: "Thư mục bản ghi"; color: "#718097"; font.pixelSize: 11 }
+                TextField { id: recordingsPath; Layout.fillWidth: true; Layout.preferredHeight: 48; text: App.recordingsPath; color: "#27364E"; selectByMouse: true; leftPadding: 16; rightPadding: 16; font.family: "Segoe UI"; font.pixelSize: 12; background: Rectangle { radius: 14; gradient: Gradient { GradientStop { position: 0; color: "#FFFFFF" } GradientStop { position: 1; color: "#E8EFF8" } } border.width: parent.activeFocus ? 2 : 1; border.color: parent.activeFocus ? "#6C8FFF" : "#D0DCEC" } }
                 RowLayout {
                     Layout.fillWidth: true
-                    Text { text: "Hiệu ứng chuyển động"; color: "#DDE4F0"; font.pixelSize: 12 }
+                    Text { text: "Hiệu ứng chuyển động"; color: "#34435A"; font.pixelSize: 12 }
                     Item { Layout.fillWidth: true }
-                    Switch { id: animations; checked: App.animationsEnabled }
+                    Switch {
+                        id: animations
+                        checked: App.animationsEnabled
+                        indicator: Rectangle {
+                            implicitWidth: 50; implicitHeight: 28; radius: 14
+                            color: animations.checked ? "#6E8DFF" : "#D9E3EF"
+                            border.width: 1; border.color: animations.checked ? "#5976DC" : "#C3D0DF"
+                            Rectangle {
+                                x: animations.checked ? parent.width - width - 4 : 4
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: 20; height: 20; radius: 10
+                                color: "#FFFFFF"
+                                border.width: 1; border.color: "#D0D9E6"
+                                Behavior on x { NumberAnimation { duration: 190; easing.type: Easing.OutBack } }
+                            }
+                            Behavior on color { ColorAnimation { duration: 180 } }
+                        }
+                    }
                 }
                 ToolButton { primary: true; glyph: "✓"; text: "Lưu cài đặt"; onClicked: App.saveSettings(receiverName.text, screenshotsPath.text, recordingsPath.text, animations.checked) }
             }
@@ -376,9 +416,9 @@ ApplicationWindow {
         GlassPanel {
             Layout.fillWidth: true; Layout.preferredHeight: 126
             Column { anchors.fill: parent; anchors.margins: 22; spacing: 8
-                Text { text: "Phím tắt"; color: "#F0F3F9"; font.pixelSize: 15; font.weight: Font.DemiBold }
-                Text { text: "F11: toàn màn hình   •   ESC: thoát toàn màn hình   •   R: xoay 90°"; color: "#8996AA"; font.pixelSize: 11 }
-                Text { text: "Khung hình tự thích ứng khi iPhone chuyển giữa chế độ dọc và ngang."; color: "#6A9CFF"; font.pixelSize: 11 }
+                Text { text: "Phím tắt"; color: "#2A3950"; font.pixelSize: 15; font.weight: Font.DemiBold }
+                Text { width: parent.width; elide: Text.ElideRight; text: "F11: toàn màn hình   •   ESC: thoát toàn màn hình   •   R: xoay 90°"; color: "#718097"; font.pixelSize: 11 }
+                Text { width: parent.width; elide: Text.ElideRight; text: "Khung hình tự thích ứng khi iPhone chuyển giữa chế độ dọc và ngang."; color: "#4F7CE2"; font.pixelSize: 11 }
             }
         }
     }
@@ -389,11 +429,11 @@ ApplicationWindow {
         y: 26
         width: 360; height: 86; padding: 0
         closePolicy: Popup.NoAutoClose
-        background: GlassPanel { panelColor: "#F0182032"; panelRadius: 18; strokeColor: "#407DA4FF" }
+        background: GlassPanel { panelColor: "#FAFFFFFF"; panelRadius: 18; strokeColor: "#BFD2EE" }
         contentItem: Column {
             leftPadding: 18; rightPadding: 18; topPadding: 15; spacing: 6
-            Text { id: toastTitle; color: "#F4F7FD"; font.pixelSize: 13; font.weight: Font.DemiBold }
-            Text { id: toastMessage; width: parent.width - 36; elide: Text.ElideMiddle; color: "#9AA7BA"; font.pixelSize: 10 }
+            Text { id: toastTitle; color: "#29384F"; font.pixelSize: 13; font.weight: Font.DemiBold }
+            Text { id: toastMessage; width: parent.width - 36; elide: Text.ElideMiddle; color: "#748299"; font.pixelSize: 10 }
         }
         Timer { id: toastTimer; interval: 3500; onTriggered: toastPopup.close() }
     }
