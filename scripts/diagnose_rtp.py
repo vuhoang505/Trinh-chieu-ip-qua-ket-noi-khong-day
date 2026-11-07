@@ -33,6 +33,10 @@ def on_error(message: str) -> None:
 
 pipeline = VideoPipeline(port, on_frame, on_error)
 pipeline.start()
+startup_delay = float(os.environ.get("RTP_STARTUP_DELAY", "0") or 0)
+if startup_delay > 0:
+    print(f"WAITING_BEFORE_SENDER={startup_delay:.1f}s")
+    time.sleep(startup_delay)
 runtime = Path(r"C:\msys64\ucrt64\bin")
 environment = os.environ.copy()
 environment["PATH"] = f"{runtime}{os.pathsep}{environment.get('PATH', '')}"

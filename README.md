@@ -135,6 +135,8 @@ recordings default to sibling folders there. Useful advanced keys include
 - Real UxPlay receiver process; no mock receiver in production.
 - Low-latency QML preview via RTP/PyAV with measured FPS, latest-frame delivery, and
   no queued-frame buildup when the UI is briefly busy.
+- Self-healing RTP receiver: read timeouts and AirPlay reconnects rebind the local
+  video port automatically instead of permanently stopping the preview thread.
 - Responsive light 3D dashboard with polished hover/press/focus effects,
   distraction-free fullscreen, automatic portrait/landscape sizing, manual 90°
   rotation, and keyboard shortcuts.
