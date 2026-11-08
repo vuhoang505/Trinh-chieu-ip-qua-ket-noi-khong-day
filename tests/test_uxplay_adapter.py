@@ -23,6 +23,7 @@ def test_command_builds_real_rtp_pipeline(tmp_path):
     assert command[0] == str(executable)
     assert "-vrtp" in command
     assert "port=5123" in command[command.index("-vrtp") + 1]
+    assert "config-interval=-1" in command[command.index("-vrtp") + 1]
     assert command[command.index("-pin") + 1] == "1234"
     assert "-as" in command and "0" in command
 

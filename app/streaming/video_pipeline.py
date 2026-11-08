@@ -53,6 +53,7 @@ class VideoPipeline:
     def _decode(self) -> None:
         consecutive_failures = 0
         while not self._stop.is_set():
+            retry_delay = 0.25
             try:
                 decoded_any = self._decode_session()
                 consecutive_failures = 0 if decoded_any else consecutive_failures + 1
@@ -60,12 +61,16 @@ class VideoPipeline:
                 if self._stop.is_set():
                     break
                 consecutive_failures += 1
-                LOGGER.warning(
-                    "Video RTP session interrupted; retrying (%s/%s): %s",
-                    consecutive_failures,
-                    3,
-                    error,
-                )
+                retry_delay = min(0.25 * (2 ** min(consecutive_failures - 1, 3)), 2.0)
+                # Avoid flooding the log if FFmpeg opens in the middle of a
+                # GOP and must wait for the next parameter set/keyframe.
+                if consecutive_failures <= 3 or consecutive_failures % 10 == 0:
+                    LOGGER.warning(
+                        "Video RTP session interrupted; retry %s in %.2fs: %s",
+                        consecutive_failures,
+                        retry_delay,
+                        error,
+                    )
                 if consecutive_failures == 3:
                     self.on_error("Đang tự khôi phục luồng hình ảnh RTP…")
             finally:
@@ -78,9 +83,9 @@ class VideoPipeline:
                         pass
 
             if not self._stop.is_set():
-                # A short backoff avoids a busy loop when no iPhone is sending,
-                # while keeping reconnection fast enough to feel immediate.
-                self._stop.wait(0.2)
+                # Exponential backoff avoids repeatedly reopening in the middle
+                # of the same GOP, giving the payloader time to emit a fresh IDR.
+                self._stop.wait(retry_delay)
 
     def _decode_session(self) -> bool:
         sdp = (
@@ -91,7 +96,6 @@ class VideoPipeline:
             "t=0 0\r\n"
             f"m=video {self.port} RTP/AVP 96\r\n"
             "a=rtpmap:96 H264/90000\r\n"
-            "a=fmtp:96 packetization-mode=1\r\n"
             "a=recvonly\r\n"
         )
         self._container = av.open(
@@ -100,23 +104,21 @@ class VideoPipeline:
             mode="r",
             options={
                 "protocol_whitelist": "file,udp,rtp,crypto,data",
-                "fflags": "nobuffer",
-                "flags": "low_delay",
-                "analyzeduration": "500000",
+                # Let FFmpeg retain the first SPS/PPS/IDR while probing. The
+                # previous nobuffer setup could consume and discard the only
+                # initial iPhone keyframe, leaving audio alive but no picture.
+                "analyzeduration": "1000000",
                 "probesize": "1048576",
-                # Keep a small localhost jitter window. A zero-sized queue was
-                # fast in synthetic tests but could discard fragmented iPhone
-                # H.264 parameter packets before the first keyframe.
-                "max_delay": "100000",
-                "reorder_queue_size": "16",
-                "buffer_size": "1048576",
+                "buffer_size": "2097152",
                 # A finite read timeout lets stop() finish and lets this worker
                 # rebind after AirPlay disconnects instead of dying forever.
                 "rw_timeout": "2000000",
             },
         )
         stream = self._container.streams.video[0]
-        stream.thread_type = "SLICE"
+        # AUTO is more tolerant of the frame/slice layouts emitted by different
+        # iOS versions. UI latency is controlled by latest-frame delivery.
+        stream.thread_type = "AUTO"
         decoded_any = False
         for frame in self._container.decode(stream):
             if self._stop.is_set():

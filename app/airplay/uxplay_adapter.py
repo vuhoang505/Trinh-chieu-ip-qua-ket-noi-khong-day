@@ -58,7 +58,7 @@ class UxPlayAdapter(ReceiverAdapter):
 
     def command(self, options: ReceiverOptions) -> list[str]:
         pipeline = (
-            f"config-interval=1 pt=96 ! udpsink host=127.0.0.1 "
+            f"config-interval=-1 pt=96 ! udpsink host=127.0.0.1 "
             f"port={options.rtp_port} sync=false async=false"
         )
         args = [
